@@ -1,4 +1,4 @@
-// PurchasedProductsActivity.kt
+// ViewStoreActivity.kt
 package com.example.agromarketapp
 
 import android.content.Intent
@@ -8,27 +8,43 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 
-class PurchasedProductsActivity : AppCompatActivity() {
+class ViewStoreActivity : AppCompatActivity() {
 
     private lateinit var prefs: android.content.SharedPreferences
-    private lateinit var usuarioActual: String
+    private lateinit var usuario: String
     private lateinit var contenedor: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_purchased_products)
+        setContentView(R.layout.activity_view_store)
 
         prefs = getSharedPreferences("datos_usuario", MODE_PRIVATE)
-        usuarioActual = prefs.getString("usuario_actual", "") ?: ""
-        contenedor = findViewById(R.id.contenedorCompras)
+        usuario = intent.getStringExtra("usuario") ?: ""
+        contenedor = findViewById(R.id.contenedorProductos)
 
-        if (intent.getBooleanExtra("compra_confirmada", false)) {
-            Toast.makeText(this, "¡Gracias por tu compra!", Toast.LENGTH_LONG).show()
+        val tiendaStr = prefs.getString("tienda_$usuario", null)
+        val campos = tiendaStr?.split("|") ?: listOf("", "", "", "", "", "")
+
+        findViewById<TextView>(R.id.textNombreTienda).text = "Nombre: ${campos.getOrNull(0) ?: ""}"
+        findViewById<TextView>(R.id.textDescripcionTienda).text = "Descripción: ${campos.getOrNull(1) ?: ""}"
+        findViewById<TextView>(R.id.textUbicacion).text = "Ubicación: ${campos.getOrNull(2) ?: ""}"
+        findViewById<TextView>(R.id.textHorario).text = "Horario: ${campos.getOrNull(3) ?: ""}"
+        findViewById<TextView>(R.id.textContacto).text = "Contacto: ${campos.getOrNull(4) ?: ""}"
+        findViewById<TextView>(R.id.textCategoria).text = "Categoría: ${campos.getOrNull(5) ?: ""}"
+
+        val imageView = findViewById<ImageView>(R.id.imageViewTienda)
+        val uri = prefs.getString("imagen_tienda_$usuario", null)
+        if (!uri.isNullOrEmpty()) {
+            try {
+                imageView.setImageURI(Uri.parse(uri))
+            } catch (e: Exception) {
+                Toast.makeText(this, "Error al cargar la imagen de la tienda", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        val comprasStr = prefs.getString("compras_$usuarioActual", null)
-        val compras = comprasStr?.split(";;")?.map {
-            val campos = it.split("||")
+        val productosStr = prefs.getString("productos_$usuario", null)
+        val productos = productosStr?.split(";")?.map {
+            val campos = it.split("|")
             Producto(
                 campos.getOrElse(0) { "" },
                 campos.getOrElse(1) { "" },
@@ -38,12 +54,12 @@ class PurchasedProductsActivity : AppCompatActivity() {
                 campos.getOrElse(5) { "" },
                 campos.getOrElse(6) { "" },
                 campos.getOrElse(7) { "" }
-            ) to campos.getOrElse(8) { "" }
+            )
         } ?: emptyList()
 
         contenedor.removeAllViews()
 
-        compras.forEachIndexed { index, (producto, uri) ->
+        productos.forEachIndexed { index, producto ->
             val layout = LinearLayout(this)
             layout.orientation = LinearLayout.VERTICAL
             layout.setPadding(16)
@@ -53,9 +69,10 @@ class PurchasedProductsActivity : AppCompatActivity() {
             nombre.textSize = 18f
             layout.addView(nombre)
 
-            if (uri.isNotEmpty()) {
+            val uriProd = prefs.getString("imagen_producto_${usuario}_$index", null)
+            if (!uriProd.isNullOrEmpty()) {
                 val image = ImageView(this)
-                image.setImageURI(Uri.parse(uri))
+                image.setImageURI(Uri.parse(uriProd))
                 image.layoutParams = LinearLayout.LayoutParams(300, 300)
                 layout.addView(image)
             }
@@ -70,7 +87,7 @@ class PurchasedProductsActivity : AppCompatActivity() {
                 intent.putExtra("fechaCosecha", producto.fechaCosecha)
                 intent.putExtra("certificacion", producto.certificacion)
                 intent.putExtra("regionOrigen", producto.regionOrigen)
-                intent.putExtra("imagenUri", uri)
+                intent.putExtra("imagenUri", uriProd)
                 startActivity(intent)
             }
 

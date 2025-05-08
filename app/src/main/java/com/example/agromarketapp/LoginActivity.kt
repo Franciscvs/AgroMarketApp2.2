@@ -22,48 +22,36 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        val username = findViewById<EditText>(R.id.editTextText1)
-        val password = findViewById<EditText>(R.id.editTextTextPassword1)
-
+        val editUsuario = findViewById<EditText>(R.id.editTextText1)
+        val editPassword = findViewById<EditText>(R.id.editTextTextPassword1)
         val btnAtras = findViewById<Button>(R.id.button1)
         val btnIngresar = findViewById<Button>(R.id.button2)
-        val btnOlvidarContrasena = findViewById<Button>(R.id.button3)
-        val btnNoTieneUsuario = findViewById<Button>(R.id.button4)
+        val btnRecuperarCorreo = findViewById<Button>(R.id.button3)
+        val btnCrearCuenta = findViewById<Button>(R.id.button4)
 
         btnIngresar.setOnClickListener {
-            val usuarioIngresado = username.text.toString().trim()
-            val contrasenaIngresada = password.text.toString()
+            val usuario = editUsuario.text.toString().trim()
+            val contrasena = editPassword.text.toString()
 
-            if (usuarioIngresado.isEmpty() || contrasenaIngresada.isEmpty()) {
-                Toast.makeText(this, "Por favor completa todos los campos.", Toast.LENGTH_SHORT).show()
+            if (usuario.isEmpty() || contrasena.isEmpty()) {
+                Toast.makeText(this, "Por favor ingresa usuario y contraseña.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val prefs = getSharedPreferences("datos_usuario", MODE_PRIVATE)
-            val usuarioGuardado = prefs.getString("usuario", null)
-            val contrasenaGuardada = prefs.getString("contrasena", null)
+            val stringUsuarios = prefs.getString("usuarios", null)
+            val usuarios = obtenerUsuariosGuardados(stringUsuarios)
 
-            if (usuarioGuardado == null || contrasenaGuardada == null) {
-                Toast.makeText(this, "No hay usuarios registrados. Por favor crea una cuenta.", Toast.LENGTH_SHORT).show()
-            } else if (usuarioIngresado == usuarioGuardado && contrasenaIngresada == contrasenaGuardada) {
-                Toast.makeText(this, "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+            val usuarioValido = usuarios.find { it.usuario == usuario && it.contrasena == contrasena }
+
+            if (usuarioValido != null) {
+                prefs.edit().putString("usuario_actual", usuario).apply() // ← importante
+                Toast.makeText(this, "Ingreso exitoso. Bienvenido ${usuarioValido.nombres}", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
                 Toast.makeText(this, "Usuario o contraseña incorrectos.", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        btnOlvidarContrasena.setOnClickListener {
-            val intent = Intent(this, EmailActivity::class.java)
-            startActivity(intent)
-        }
-
-        btnNoTieneUsuario.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
         }
 
         btnAtras.setOnClickListener {
@@ -72,5 +60,27 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        btnRecuperarCorreo.setOnClickListener {
+            startActivity(Intent(this, EmailActivity::class.java))
+        }
+
+        btnCrearCuenta.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+    }
+
+    private fun obtenerUsuariosGuardados(prefString: String?): MutableList<Usuario> {
+        val lista = mutableListOf<Usuario>()
+        if (!prefString.isNullOrEmpty()) {
+            val registros = prefString.split(";")
+            for (r in registros) {
+                val campos = r.split("|")
+                if (campos.size == 5) {
+                    lista.add(Usuario(campos[0], campos[1], campos[2], campos[3], campos[4]))
+                }
+            }
+        }
+        return lista
     }
 }

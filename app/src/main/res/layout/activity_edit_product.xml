@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Imagen producto -->
+
+        <ImageView
+            android:id="@+id/Imageview1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.2"
+            android:scaleType="centerCrop"
+            android:src="@drawable/trabajo_en_el_campo_con_bueyes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageViewProducto"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/imagen_producto"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Botón seleccionar imagen -->
+        <Button
+            android:id="@+id/buttonSeleccionarImagenProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Imagen"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/imageViewProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp" />
+
+        <!-- Nombre -->
+        <EditText
+            android:id="@+id/editTextNombreProducto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del producto"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/buttonSeleccionarImagenProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Descripción -->
+        <EditText
+            android:id="@+id/editTextDescripcionProducto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Descripción"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextNombreProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Precio -->
+        <EditText
+            android:id="@+id/editTextPrecioProducto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Precio"
+            android:inputType="numberDecimal"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextDescripcionProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Tipo de cultivo -->
+        <EditText
+            android:id="@+id/editTextTipoCultivo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Tipo de cultivo / variedad"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextPrecioProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Unidad de venta -->
+        <EditText
+            android:id="@+id/editTextUnidadVenta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Unidad de venta (Kg, bulto, etc.)"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextTipoCultivo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Fecha de cosecha -->
+        <EditText
+            android:id="@+id/editTextFechaCosecha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de cosecha"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextUnidadVenta"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Certificación -->
+        <EditText
+            android:id="@+id/editTextCertificacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Certificación (Orgánico, BPA, etc.)"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextFechaCosecha"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Región de origen -->
+        <EditText
+            android:id="@+id/editTextRegionOrigen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Región o finca de origen"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/editTextCertificacion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <!-- Botón guardar -->
+
+        <!-- Botón volver -->
+
+        <!-- Botón cerrar sesión -->
+
+        <Button
+            android:id="@+id/buttonGuardarProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#4CAF50"
+            android:text="Guardar"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextRegionOrigen" />
+
+        <Button
+            android:id="@+id/buttonVolver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="36dp"
+            android:backgroundTint="#8A6120"
+            android:text="Volver"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonGuardarProducto" />
+
+        <Button
+            android:id="@+id/buttonCerrarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#D32F2F"
+            android:text="Cerrar Sesión"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonGuardarProducto" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

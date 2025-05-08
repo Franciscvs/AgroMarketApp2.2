@@ -3,6 +3,7 @@ package com.example.agromarketapp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,6 +32,19 @@ class MainActivity : AppCompatActivity() {
         btnTuTienda.setOnClickListener {
             val intent = Intent(this, YourStoreActivity::class.java)
             startActivity(intent)
+            val prefs = getSharedPreferences("datos_usuario", MODE_PRIVATE)
+            val usuario = prefs.getString("usuario_actual", "") ?: ""
+            val tiendaRegistrada = prefs.getString("tienda_$usuario", null)
+
+            if (tiendaRegistrada != null) {
+                // Si ya tiene tienda, ir a verla
+                startActivity(Intent(this, YourStoreActivity::class.java))
+            } else {
+                // Si no tiene tienda, ir a crearla
+                Toast.makeText(this, "No tienes tienda registrada. Vamos a crear una.", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, EditStoreActivity::class.java))
+            }
+
         }
 
         btnTuUsuario.setOnClickListener {

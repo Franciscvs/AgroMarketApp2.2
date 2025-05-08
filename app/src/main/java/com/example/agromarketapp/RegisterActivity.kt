@@ -2,15 +2,14 @@ package com.example.agromarketapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class RegisterActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,52 +27,73 @@ class RegisterActivity : AppCompatActivity() {
         val email = findViewById<EditText>(R.id.editTextText4)
         val password = findViewById<EditText>(R.id.editTextTextPassword1)
         val confirmPassword = findViewById<EditText>(R.id.editTextTextPassword2)
+
         val btnAtras = findViewById<Button>(R.id.button1)
         val btnCrearCuenta = findViewById<Button>(R.id.button2)
 
         btnCrearCuenta.setOnClickListener {
-            val nuevoUsuario = newUsername.text.toString().trim()
+            val usuario = newUsername.text.toString().trim()
             val nombres = names.text.toString().trim()
             val apellidos = lastNames.text.toString().trim()
             val correo = email.text.toString().trim()
             val contrasena = password.text.toString()
-            val confirmarContrasena = confirmPassword.text.toString()
+            val confirmar = confirmPassword.text.toString()
 
-            if (nuevoUsuario.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmarContrasena.isEmpty()) {
+            if (usuario.isEmpty() || nombres.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || confirmar.isEmpty()) {
                 Toast.makeText(this, "Por favor completa todos los campos.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (contrasena != confirmarContrasena) {
+            if (contrasena != confirmar) {
                 Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val prefs = getSharedPreferences("datos_usuario", MODE_PRIVATE)
-            val usuarioGuardado = prefs.getString("usuario", "")
+            val stringGuardado = prefs.getString("usuarios", null)
+            val listaUsuarios = obtenerUsuariosGuardados(stringGuardado)
 
-            if (nuevoUsuario == usuarioGuardado) {
-                Toast.makeText(this, "El usuario ya existe. Por favor inicia sesión.", Toast.LENGTH_SHORT).show()
-            } else {
-                with(prefs.edit()) {
-                    putString("usuario", nuevoUsuario)
-                    putString("contrasena", contrasena)
-                    apply()
-                }
-                Toast.makeText(this, "Cuenta creada exitosamente para $nuevoUsuario.", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, BaseActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                startActivity(intent)
-                finish()
+            val yaExiste = listaUsuarios.any { it.usuario == usuario || it.correo == correo }
+            if (yaExiste) {
+                Toast.makeText(this, "El usuario o correo ya existe.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val nuevoUsuario = Usuario(usuario, nombres, apellidos, correo, contrasena)
+            listaUsuarios.add(nuevoUsuario)
+
+            val nuevoString = serializarUsuarios(listaUsuarios)
+            prefs.edit().putString("usuarios", nuevoString).apply()
+            prefs.edit().putString("usuario_actual", usuario).apply()  // <- ESTA LÍNEA ES CLAVE
+
+
+            Toast.makeText(this, "Cuenta creada exitosamente.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
 
         btnAtras.setOnClickListener {
-            val intent = Intent(this, BaseActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            startActivity(intent)
+            startActivity(Intent(this, BaseActivity::class.java))
             finish()
         }
     }
+
+    private fun obtenerUsuariosGuardados(prefString: String?): MutableList<Usuario> {
+        val lista = mutableListOf<Usuario>()
+        if (!prefString.isNullOrEmpty()) {
+            val registros = prefString.split(";")
+            for (r in registros) {
+                val campos = r.split("|")
+                if (campos.size == 5) {
+                    lista.add(Usuario(campos[0], campos[1], campos[2], campos[3], campos[4]))
+                }
+            }
+        }
+        return lista
+    }
+
+    private fun serializarUsuarios(usuarios: List<Usuario>): String {
+        return usuarios.joinToString(";") { "${it.usuario}|${it.nombres}|${it.apellidos}|${it.correo}|${it.contrasena}" }
+    }
+
 }

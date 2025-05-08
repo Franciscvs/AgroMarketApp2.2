@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.agromarketapp">
 
     <application
         android:allowBackup="true"
@@ -13,60 +13,44 @@
         android:theme="@style/Theme.AgroMarketApp"
         tools:targetApi="31">
 
-        <activity
-            android:name=".OtherUsersActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".OtherStoresActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".PurchasedProductsActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".NewProductsActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".YourUsernameActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".YourStoreActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".EmailActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".PasswordActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".BaseActivity"
-            android:exported="true">
-
+        <!-- Actividad principal -->
+        <activity android:name=".BaseActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".PaymentMethodActivity" android:exported="true" />
+
+        <!-- Autenticación -->
+        <activity android:name=".LoginActivity" android:exported="true" />
+        <activity android:name=".RegisterActivity" android:exported="true" />
+        <activity android:name=".EmailActivity" android:exported="true" />
+        <activity android:name=".PasswordActivity" android:exported="true" />
+
+        <!-- Menú principal -->
+        <activity android:name=".MainActivity" android:exported="true" />
+
+        <!-- Usuario -->
+        <activity android:name=".YourUsernameActivity" android:exported="true" />
+        <activity android:name=".EditUserActivity" android:exported="true" />
+        <activity android:name=".OtherUsersActivity" android:exported="true" />
+        <activity android:name=".ViewUserActivity" android:exported="true" />
+
+        <!-- Tienda -->
+        <activity android:name=".YourStoreActivity" android:exported="true" />
+        <activity android:name=".EditStoreActivity" android:exported="true" />
+        <activity android:name=".OtherStoresActivity" android:exported="true" />
+        <activity android:name=".ViewStoreActivity" android:exported="true" />
+
+        <!-- Productos -->
+        <activity android:name=".EditProductActivity" android:exported="true" />
+        <activity android:name=".ViewProductActivity" android:exported="true" />
+        <activity android:name=".NewProductsActivity" android:exported="true" />
+        <activity android:name=".PurchasedProductsActivity" android:exported="true" />
+
     </application>
 
 </manifest>
+
